@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Рядом: анонимная помощь при травле</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF4F5;--surface:#FFFFFF;--ink:#12283A;--muted:#587080;--line:#D3E2E6;--soft:#DCEDEF;
+  --brand:#0E7C8B;--on-brand:#FFFFFF;--hero:#16405F;--hero-ink:#F2F8FA;--ring:#3DB8C4;
+  --alert:#C8433B;--alert-soft:#FBE6E3;--ok:#2E7D50;--ok-soft:#DFF2E6;--warn:#94620F;--warn-soft:#FBEFD5;
+  --r-lg:28px;--r-md:16px;--r-sm:12px;
+  --font:'Onest',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --display:'Unbounded','Onest',system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1822;--surface:#12293A;--ink:#E6F0F3;--muted:#93AAB7;--line:#22404F;--soft:#173446;
+    --brand:#43C6D2;--on-brand:#06222A;--hero:#0F3049;--hero-ink:#EAF5F8;--ring:#43C6D2;
+    --alert:#FF8A80;--alert-soft:#3A1E22;--ok:#6BD39A;--ok-soft:#173327;--warn:#F2C56B;--warn-soft:#3A2F17;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1822;--surface:#12293A;--ink:#E6F0F3;--muted:#93AAB7;--line:#22404F;--soft:#173446;
+  --brand:#43C6D2;--on-brand:#06222A;--hero:#0F3049;--hero-ink:#EAF5F8;--ring:#43C6D2;
+  --alert:#FF8A80;--alert-soft:#3A1E22;--ok:#6BD39A;--ok-soft:#173327;--warn:#F2C56B;--warn-soft:#3A2F17;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--font);-webkit-text-size-adjust:100%}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:600;line-height:1.25}
+h2{font-size:18px;margin:28px 0 12px}
+h3{font-size:15px;margin:22px 0 10px}
+p{margin:0 0 12px}
+.muted{color:var(--muted);font-size:14px}
+.fine{color:var(--muted);font-size:13px;display:flex;gap:6px;align-items:flex-start;margin-top:12px}
+.center{text-align:center}
+.stack{display:grid;gap:10px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+svg.i{display:block;flex:none}
+
+/* header */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg)}
+.hdr.hero-hdr{background:var(--hero);color:var(--hero-ink)}
+.hdr .ttl,.hdr .brand{flex:1;font:600 16px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{position:relative;width:44px;height:44px;border:0;border-radius:50%;background:transparent;display:grid;place-items:center}
+.ib:active{background:rgba(127,127,127,.18)}
+.dot{position:absolute;top:3px;right:1px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#D64545;color:#fff;font:700 11px/18px var(--font);text-align:center}
+.dot2{width:10px;height:10px;border-radius:50%;background:var(--alert);flex:none}
+.tbtn{border:1.5px solid var(--line);background:transparent;border-radius:999px;padding:6px 14px;font-weight:500}
+
+/* layout */
+.pad{max-width:720px;margin:0 auto;padding:12px 16px 40px}
+.lead{font-size:17px;margin:4px 0 14px}
+.lbl{display:block;font-weight:600;font-size:15px;margin:20px 0 8px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--hero);color:var(--hero-ink);border-radius:0 0 var(--r-lg) var(--r-lg);padding:20px 20px 32px}
+.hero-in{position:relative;max-width:720px;margin:0 auto}
+.hero h1{font-size:28px;margin:36px 0 12px;max-width:11em}
+.hero p{font-size:17px;opacity:.92;max-width:26em;margin-bottom:24px}
+.rings{position:absolute;right:-70px;top:8px;width:300px;height:300px;fill:none;stroke:var(--ring);stroke-width:1.5;pointer-events:none}
+.rings circle{transform-origin:150px 150px;animation:ripple 7s ease-in-out infinite}
+.rings circle:nth-child(1){opacity:.7}
+.rings circle:nth-child(2){opacity:.5;animation-delay:.6s}
+.rings circle:nth-child(3){opacity:.35;animation-delay:1.2s}
+.rings circle:nth-child(4){opacity:.22;animation-delay:1.8s}
+@keyframes ripple{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 20px;font-weight:600;font-size:16px;text-align:center}
+.btn.big{padding:16px 22px;font-size:17px}
+.btn.full{width:100%}
+.btn.primary{background:var(--brand);color:var(--on-brand)}
+.btn.soft{background:var(--soft);color:var(--ink)}
+.btn.danger-soft{background:var(--alert-soft);color:var(--alert)}
+.hero .btn.primary{background:#fff;color:#16405F}
+.hero .btn.ghost{background:transparent;color:var(--hero-ink);border:1.5px solid rgba(255,255,255,.5)}
+.btn:active{transform:scale(.98)}
+.link-btn{background:none;border:0;color:var(--brand);font-weight:600;padding:8px 0}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin-bottom:10px}
+.card.link,.rc,.nt{display:flex;width:100%;text-align:left;align-items:center;justify-content:space-between;gap:12px;color:var(--ink)}
+.card.link>div{display:grid}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.steps li{display:flex;gap:12px;align-items:flex-start}
+.steps b{display:block}
+.steps span:not(.n){color:var(--muted);font-size:14px}
+.n{width:32px;height:32px;border-radius:50%;background:var(--soft);color:var(--brand);font:600 14px var(--display);display:grid;place-items:center;flex:none}
+.assure{display:grid;gap:10px}
+.assure div{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px}
+.assure svg{color:var(--brand)}
+.demo{margin-top:24px;font-size:13px;color:var(--muted);background:var(--warn-soft);border-radius:var(--r-sm);padding:10px 12px}
+
+/* type grid: fills the screen */
+.tgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr) .65fr;gap:12px;
+  height:calc(100dvh - 150px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:560px}
+.tcard{--c:#6B7F8C;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;text-align:left;
+  padding:16px;border-radius:var(--r-lg);border:1.5px solid color-mix(in srgb,var(--c) 45%,var(--line));
+  background:color-mix(in srgb,var(--c) 18%,var(--surface));color:var(--ink)}
+.tcard.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px}
+.tcard .em{width:52px;height:52px;border-radius:50%;background:color-mix(in srgb,var(--c) 30%,var(--surface));display:grid;place-items:center;font-size:26px;flex:none}
+.tcard .tx{display:grid;gap:4px}
+.tcard b{font-size:16px;line-height:1.25}
+.tcard small{font-size:13px;color:var(--muted);line-height:1.35}
+.tcard:active{transform:scale(.98)}
+
+/* form */
+.typebar{--c:#6B7F8C;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-md);background:color-mix(in srgb,var(--c) 18%,var(--surface));border:1.5px solid color-mix(in srgb,var(--c) 45%,var(--line))}
+.typebar b{flex:1}
+.typebar .link-btn{padding:0}
+.field{width:100%;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 14px;font-size:16px}
+textarea.field{min-height:150px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-weight:500;font-size:14px}
+.chip.on{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.chip.static{cursor:default}
+.files{display:grid;gap:8px;margin:10px 0}
+.file{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px}
+.file img{width:44px;height:44px;object-fit:cover;border-radius:8px}
+.file .fi{width:44px;height:44px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-size:20px}
+.file span:not(.fi){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.file button{border:0;background:none;color:var(--muted);padding:6px}
+.check{display:flex;gap:10px;align-items:center;margin:20px 0 16px;font-weight:500}
+.check input{width:22px;height:22px;accent-color:var(--brand)}
+
+/* done */
+.okmark{width:76px;height:76px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:20px auto 12px}
+.codebox{background:var(--surface);border:1.5px dashed var(--line);border-radius:var(--r-md);padding:16px;display:grid;gap:8px;justify-items:center;margin:16px 0}
+.code{font:600 28px var(--display);letter-spacing:.04em}
+.helpcard{text-align:left;border-color:var(--alert);background:var(--alert-soft);margin:14px 0}
+.helpcard p{margin:6px 0 0;white-space:pre-line}
+
+/* report cards */
+.rc{--c:#6B7F8C;align-items:flex-start;border-left:5px solid var(--c)}
+.rc .em{font-size:24px}
+.rc-b{display:grid;gap:4px;flex:1;min-width:0}
+.rc-t{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rc-p{font-size:14px;color:var(--ink);opacity:.85}
+.rc-m{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--soft);color:var(--ink)}
+.pill.new{background:var(--warn-soft);color:var(--warn)}
+.pill.work{background:var(--soft);color:var(--brand)}
+.pill.done{background:var(--ok-soft);color:var(--ok)}
+.pill.alert{background:var(--alert-soft);color:var(--alert)}
+.nt.new{border-color:var(--brand)}
+.nt{flex-direction:column;align-items:flex-start;gap:4px}
+.empty{text-align:center;padding:40px 10px;display:grid;gap:8px;justify-items:center}
+.empty .big{font-size:44px}
+
+/* detail */
+.rephead{--c:#6B7F8C;display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:var(--r-md);background:color-mix(in srgb,var(--c) 18%,var(--surface));border:1.5px solid color-mix(in srgb,var(--c) 45%,var(--line));margin-bottom:12px}
+.rephead .em{font-size:26px}
+.rephead>div{display:grid;flex:1}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.stepper{display:flex;margin:14px 0 6px}
+.st{flex:1;text-align:center;font-size:13px;color:var(--muted);position:relative}
+.st i{display:block;width:22px;height:22px;border-radius:50%;background:var(--line);margin:0 auto 6px;position:relative;z-index:1}
+.st::before{content:"";position:absolute;top:10px;left:-50%;width:100%;height:3px;background:var(--line)}
+.st:first-child::before{display:none}
+.st.on{color:var(--ink);font-weight:600}
+.st.on i,.st.on::before{background:var(--brand)}
+.msg{max-width:84%;padding:10px 14px;border-radius:18px;margin:8px 0;line-height:1.45;word-wrap:break-word;overflow-wrap:anywhere}
+.msg small{display:block;font-size:12px;opacity:.75;margin-top:4px}
+.msg.me{margin-left:auto;background:var(--brand);color:var(--on-brand);border-bottom-right-radius:6px}
+.msg.them{background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:6px}
+.msg.ai{background:var(--soft);border-bottom-left-radius:6px}
+.msg.sys{margin:10px auto;background:var(--warn-soft);color:var(--ink);font-size:13px;border-radius:12px;max-width:94%;text-align:center}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--soft);border-radius:999px;padding:4px;gap:4px}
+.segb{border:0;background:transparent;border-radius:999px;padding:10px 6px;font-weight:600;font-size:14px}
+.segb.on{background:var(--brand);color:var(--on-brand)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin:10px 0}
+.gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+.gallery .fi{aspect-ratio:1;border-radius:12px;background:var(--soft);display:grid;place-items:center;text-align:center;padding:6px;font-size:12px;word-break:break-all}
+
+/* chat */
+.banner{display:flex;gap:8px;align-items:flex-start;background:var(--soft);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;margin-bottom:8px}
+.composer{position:sticky;bottom:0;display:flex;gap:8px;align-items:flex-end;padding:10px 0 4px;background:var(--bg)}
+.composer .field{min-height:0;height:48px;border-radius:24px;padding:12px 16px;resize:none}
+.send{background:var(--brand);color:var(--on-brand);flex:none}
+.qk{margin:10px 0 0}
+.typing{opacity:.6}
+
+/* staff */
+.who{display:flex;align-items:center;gap:10px;margin:6px 0 10px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;-webkit-overflow-scrolling:touch}
+.tabs .chip{white-space:nowrap;flex:none}
+.who{flex-wrap:wrap;row-gap:8px}
+.who .link-btn{margin-left:auto;white-space:nowrap}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px}
+.stat b{display:block;font:600 26px var(--display)}
+.stat.al{background:var(--alert-soft);border-color:var(--alert)}
+.stat.al b{color:var(--alert)}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:120px 1fr 28px;gap:8px;align-items:center;font-size:13px}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--brand)}
+.logrow{font-size:14px;padding:8px 0;border-bottom:1px solid var(--line)}
+.switch{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.switch input{width:46px;height:26px;accent-color:var(--brand)}
+.scroll-x{overflow-x:auto}
+
+/* overlays */
+.scrim{position:fixed;inset:0;background:rgba(6,20,30,.55);z-index:40}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(84vw,330px);background:var(--surface);z-index:50;transform:translateX(-100%);transition:transform .25s ease;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 12px;overflow-y:auto}
+.drawer.open{transform:none}
+.dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.dh .brand{font:600 18px var(--display);padding-left:8px}
+.mi{display:flex;gap:14px;align-items:center;width:100%;border:0;background:transparent;text-align:left;padding:14px 10px;border-radius:14px;font-weight:500}
+.mi:active{background:var(--soft)}
+.mi svg{color:var(--brand)}
+.sep{height:1px;background:var(--line);margin:8px 0}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;width:min(88vw,360px);background:var(--surface);border-radius:var(--r-lg);padding:22px;display:grid;gap:14px}
+.modal .stack{grid-template-columns:1fr 1fr}
+.breath{text-align:center;justify-items:center}
+.orb{width:150px;height:150px;border-radius:50%;background:var(--brand);opacity:.85;animation:breathe 8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.55)}50%{transform:scale(1)}}
+#bt{font:600 20px var(--display);margin:0}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:60;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+/* backend states */
+.skel{background:linear-gradient(90deg,var(--soft) 25%,var(--line) 37%,var(--soft) 63%);background-size:400% 100%;animation:sk 1.4s ease infinite;border-radius:var(--r-md);height:64px;margin-bottom:10px}
+@keyframes sk{0%{background-position:100% 50%}100%{background-position:0 50%}}
+.err{text-align:center;padding:28px 10px;display:grid;gap:10px;justify-items:center}
+.pwmeter{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:8px 0 2px}
+.pwmeter i{display:block;height:100%;background:var(--alert);width:10%;transition:.2s}
+.pwmeter.ok i{background:var(--ok)}
+.pwmeter.mid i{background:var(--warn)}
+.gencard{background:var(--surface);border:1.5px dashed var(--line);border-radius:var(--r-md);padding:16px;display:grid;gap:6px;margin-top:10px}
+.gencard b{font:600 20px var(--display);letter-spacing:.02em;word-break:break-all}
+</style>
+</head>
+<body>
+<div id="hdr"></div>
+<main id="app"></main>
+<div id="overlay"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="fi" multiple accept="image/*,video/*,.pdf" hidden>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+'use strict';
+
+if(!window.supabase||!window.supabase.createClient){
+  document.body.innerHTML='<div style="padding:60px 20px;text-align:center;font-family:sans-serif;color:#12283A"><div style="font-size:40px">📡</div><h2>Не удалось загрузить сайт</h2><p>Проверь интернет-соединение и обнови страницу.</p></div>';
+  return;
+}
+
+/* ================= Supabase ================= */
+const SUPABASE_URL = 'https://kjspmpxpfowsmptrzemr.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtqc3BtcHhwZm93c21wdHJ6ZW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5NzY0MDgsImV4cCI6MjEwNTU1MjQwOH0.r4T95o2YB6tpjei7fReXk22KCQzYOo5g7IxfMTqU29E';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ================= local device storage (only for the codes a student's own phone remembers) ================= */
+const mem={};let warned=false;
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);if(v!==null)return JSON.parse(v);}catch(e){}return k in mem?mem[k]:d;},
+  set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){if(!warned){warned=true;toast('Память браузера недоступна. Код обращения сохранится только до закрытия страницы.');}return false;}},
+  del(k){delete mem[k];try{localStorage.removeItem(k);}catch(e){}}
+};
+
+/* ================= helpers ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nl=s=>esc(s).replace(/\n/g,'<br>');
+const now=()=>Date.now();
+const uid=()=>Math.random().toString(36).slice(2,10);
+const fmt=ts=>new Date(ts).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+function toast(m){const t=$('#toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),3200);}
+function genPassword(){
+  const chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let out='';const a=new Uint32Array(14);try{crypto.getRandomValues(a);}catch(e){for(let i=0;i<14;i++)a[i]=Math.floor(Math.random()*1e9);}
+  for(let i=0;i<14;i++)out+=chars[a[i]%chars.length];
+  return out;
+}
+
+const P={
+  menu:'<path d="M4 7h16M4 12h16M4 17h10"/>',
+  bell:'<path d="M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15L6 16z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  back:'<path d="M15 5l-7 7 7 7"/>',
+  close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  clip:'<path d="M20 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/>',
+  send:'<path d="M4 12L20 4l-6 16-3-7-7-1z"/>',
+  shield:'<path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/>',
+  lock:'<path d="M6 11h12v9H6z"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/>',
+  chat:'<path d="M4 5h16v11H9l-5 4V5z"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>',
+  phone:'<path d="M6 4h3l2 5-2 1.5a11 11 0 0 0 4.5 4.5L15 13l5 2v3a2 2 0 0 1-2 2A15 15 0 0 1 4 6a2 2 0 0 1 2-2z"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/>',
+  moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
+  copy:'<path d="M9 9h11v11H9z"/><path d="M5 15V4h11"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 5l3 3M14 8l2 2"/>',
+  warn:'<path d="M12 3l10 18H2L12 3z"/><path d="M12 10v5M12 18v.01"/>'
+};
+const ic=(n,s)=>`<svg class="i" width="${s||24}" height="${s||24}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]||''}</svg>`;
+
+/* ================= constants ================= */
+const TYPES=[
+  {id:'physical',name:'Физическое насилие',desc:'Бьют, толкают, отбирают вещи',emoji:'✊',c:'#E0654F'},
+  {id:'verbal',name:'Оскорбления',desc:'Обзывают, унижают, распускают слухи',emoji:'💬',c:'#E3A62F'},
+  {id:'cyber',name:'Кибербуллинг',desc:'Травля в чатах и соцсетях',emoji:'📱',c:'#3E7FD1'},
+  {id:'boycott',name:'Бойкот',desc:'Игнорируют, не принимают в компанию',emoji:'🚪',c:'#8A6CD0'},
+  {id:'threat',name:'Угрозы и шантаж',desc:'Запугивают, требуют что-то',emoji:'⚠️',c:'#D4506B'},
+  {id:'property',name:'Порча и кража вещей',desc:'Ломают, прячут, вымогают',emoji:'🎒',c:'#2F9E8F'},
+  {id:'other',name:'Другое или не знаю, как назвать',desc:'Расскажи своими словами',emoji:'💭',c:'#6B7F8C'}
+];
+const TM={};TYPES.forEach(t=>TM[t.id]=t);
+TM.chat={id:'chat',name:'Сообщение из чата с ИИ',emoji:'🤖',c:'#6B7F8C'};
+const PLACES=['В классе','В коридоре или столовой','По дороге в школу','В интернете','Другое'];
+const WHENS=['Только что случилось','Около недели','Больше месяца','Давно и постоянно'];
+const STATUS={new:'Получено',work:'В работе',done:'Решено'};
+const ROLE={teacher:'Учитель',psy:'Психолог',admin:'Админ'};
+const DEFAULT_HELP='Детский телефон доверия (Казахстан): 111\nДетский телефон доверия (Россия): 8-800-2000-122\nЭкстренная помощь: 112';
+const CRISIS=/(суицид|самоубий|убить себя|убью себя|покончить с собой|не хочу жить|хочу умереть|повеси|вскрыть вены|вены вскр|порезать себя|режу себя|навредить себе|наглотаюсь)/i;
+const DANGER=/(принесу нож|принесу оружие|принесу пистолет|застрелю|убью их|убью его|взорву школ)/i;
+
+/* ================= session & profile ================= */
+let session=null, profile=null, authReady=false;
+
+async function refreshProfile(){
+  if(!session){profile=null;return;}
+  const {data,error}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+  profile=error?null:data;
+}
+sb.auth.onAuthStateChange((event,s)=>{
+  session=s;authReady=true;
+  refreshProfile().then(()=>{
+    if(event==='SIGNED_OUT'){stack=[{v:'home'}];}
+    render();
+  });
+});
+
+/* ================= tiny data cache (so views can read data synchronously) ================= */
+const cache={},loading={};
+function ensure(key,fetcher){
+  if(Object.prototype.hasOwnProperty.call(cache,key))return cache[key];
+  if(!loading[key]){
+    loading[key]=true;
+    fetcher().then(v=>{cache[key]=v;loading[key]=false;render(true);})
+      .catch(e=>{cache[key]={__error:(e&&e.message)||'Не удалось загрузить данные'};loading[key]=false;render(true);});
+  }
+  return undefined;
+}
+function invalidate(prefix){Object.keys(cache).forEach(k=>{if(k.indexOf(prefix)===0){delete cache[k];delete loading[k];}});}
+
+/* ================= backend calls ================= */
+async function apiSubmitReport(){
+  const text=(B.text||'').trim();
+  const {data:code,error}=await sb.rpc('submit_report',{p_type:draft.type||'other',p_place:draft.place,p_when:draft.when,p_body:text||'(без текста, только файлы)',p_urgent:!!draft.urgent});
+  if(error)throw error;
+  for(const f of draft.files){
+    const ext=f.kind==='image'?'jpg':((f.name.split('.').pop()||'bin').toLowerCase().slice(0,8));
+    const path=code+'/'+uid()+'.'+ext;
+    const {error:upErr}=await sb.storage.from('attachments').upload(path,f.blob,{contentType:f.blob.type||'application/octet-stream'});
+    if(upErr)continue;
+    await sb.rpc('add_attachment',{p_code:code,p_path:path,p_name:f.name,p_kind:f.kind,p_size:f.blob.size});
+  }
+  return code;
+}
+async function fetchPublicSettings(){
+  const {data,error}=await sb.rpc('get_public_settings');
+  if(error||!data)return{ai_enabled:true,help_text:DEFAULT_HELP};
+  return{ai_enabled:data.ai_enabled!==false,help_text:data.help_text||DEFAULT_HELP};
+}
+async function withSignedUrls(files){
+  const out=[];
+  for(const f of (files||[])){
+    let url=null;
+    if(f.kind==='image'||f.kind==='video'){
+      try{const{data}=await sb.storage.from('attachments').createSignedUrl(f.path,3600);url=data&&data.signedUrl;}catch(e){}
+    }
+    out.push(Object.assign({},f,{url}));
+  }
+  return out;
+}
+async function fetchReportFull(code){
+  const {data,error}=await sb.rpc('get_report',{p_code:code});
+  if(error||!data)return null;
+  const {data:atts}=await sb.rpc('get_attachments',{p_code:code});
+  data.files=await withSignedUrls(atts||[]);
+  return data;
+}
+function myCodesLocal(){return store.get('ab_mycodes',[]);}
+function addCodeLocal(c){const l=myCodesLocal();if(!l.includes(c)){l.push(c);store.set('ab_mycodes',l);}}
+async function fetchMyReports(){
+  const codes=myCodesLocal();
+  if(!codes.length)return[];
+  const {data,error}=await sb.rpc('get_reports_by_codes',{p_codes:codes});
+  if(error||!data)return[];
+  return data.map(r=>({code:r.code,type:r.type,status:r.status,urgent:r.urgent,created:new Date(r.created_at).getTime(),preview:r.preview,unseen:r.unseen>0})).sort((a,b)=>b.created-a.created);
+}
+async function fetchMyEvents(){
+  const codes=myCodesLocal();
+  if(!codes.length)return[];
+  const {data,error}=await sb.rpc('get_events',{p_codes:codes});
+  if(error||!data)return[];
+  return data.map(e=>({id:e.id,code:e.code,text:e.text,seen:e.seen,ts:new Date(e.created_at).getTime()}));
+}
+function unreadCount(){
+  const ev=cache['events'];
+  if(!ev||ev.__error)return 0;
+  return ev.filter(e=>!e.seen).length;
+}
+async function apiAddStudentMessage(code,text){
+  const {error}=await sb.rpc('student_add_message',{p_code:code,p_body:text});
+  if(error)throw error;
+}
+async function apiMarkSeen(code){await sb.rpc('mark_events_seen',{p_code:code});}
+
+/* staff */
+async function fetchStaffReports(){
+  const {data,error}=await sb.from('reports').select('*').order('urgent',{ascending:false}).order('created_at',{ascending:false});
+  if(error)throw error;
+  return data.map(r=>({code:r.code,type:r.type,place:r.place,when:r.when_text,body:r.body,urgent:r.urgent,status:r.status,assignee:r.assignee,staffSeen:r.staff_seen,created:new Date(r.created_at).getTime()}));
+}
+async function fetchStaffReportFull(code){
+  const {data:r,error}=await sb.from('reports').select('*').eq('code',code).single();
+  if(error||!r)return null;
+  const {data:msgs}=await sb.from('messages').select('*').eq('report_id',r.id).order('created_at');
+  const {data:atts}=await sb.from('attachments').select('*').eq('report_id',r.id).order('created_at');
+  const files=await withSignedUrls((atts||[]).map(a=>({path:a.path,name:a.name,kind:a.kind})));
+  return{
+    code:r.code,type:r.type,place:r.place,when:r.when_text,body:r.body,urgent:r.urgent,status:r.status,
+    assignee:r.assignee,created:new Date(r.created_at).getTime(),files,
+    thread:(msgs||[]).map(m=>({from:m.sender,by:m.by_name,text:m.body,ts:new Date(m.created_at).getTime()}))
+  };
+}
+async function fetchStaffList(){
+  const{data,error}=await sb.from('profiles').select('*').order('created_at');
+  if(error)throw error;
+  return data;
+}
+async function fetchLog(){
+  const{data,error}=await sb.from('activity_log').select('*').order('created_at',{ascending:false}).limit(150);
+  if(error)throw error;
+  return data.map(x=>({ts:new Date(x.created_at).getTime(),who:x.actor_name||'Система',text:x.text}));
+}
+
+/* ================= state & navigation ================= */
+let stack=[{v:'home'}];
+const B={};
+const freshDraft=()=>({type:null,place:null,when:null,urgent:false,files:[]});
+let draft=freshDraft();
+let sFilter='all',aTab='overview';
+let chat={msgs:[],code:null,busy:false};
+let pending=null,breathT=null;
+const cur=()=>stack[stack.length-1];
+function go(v,p){stack.push({v,p});try{history.pushState({n:stack.length},'');}catch(e){}render();}
+function back(){if(stack.length>1){stack.pop();render();}}
+window.addEventListener('popstate',()=>{if(stack.length>1){stack.pop();render();}});
+
+/* ================= view helpers ================= */
+const TITLES={types:'Что случилось?',form:'Твоё обращение',done:'Готово',mine:'Мои обращения',rep:'Обращение',notifs:'Уведомления',chat:'ИИ-помощник','s-login':'Вход для сотрудников','s-setpw':'Смена пароля','s-home':'Панель','s-rep':'Обращение',what:'Что такое буллинг',help:'Куда обратиться',privacy:'Анонимность',how:'Как это работает'};
+function header(t){
+  const home=t.v==='home';const staffV=t.v.indexOf('s-')===0;
+  const un=unreadCount();
+  const left=home
+    ?`<button class="ib" data-act="menu" aria-label="Меню">${ic('menu')}</button><span class="brand">Рядом</span>`
+    :`<button class="ib" data-act="back" aria-label="Назад">${ic('back')}</button><span class="ttl">${esc(TITLES[t.v]||'')}</span>`;
+  let right='';
+  if(staffV){right=(profile&&t.v!=='s-setpw')?`<button class="tbtn" data-act="logout">Выйти</button>`:'';}
+  else{right=`<button class="ib" data-act="bell" aria-label="Уведомления">${ic('bell')}${un?`<i class="dot">${un}</i>`:''}</button>`;}
+  return `<header class="hdr${home?' hero-hdr':''}">${left}${right}</header>`;
+}
+const chip=(label,on,g)=>`<button class="chip${on?' on':''}" data-act="chip" data-g="${g}" data-val="${esc(label)}">${esc(label)}</button>`;
+function helpCard(){const s=cache['settings'];const t=(s&&!s.__error&&s.help_text)?s.help_text:DEFAULT_HELP;return `<div class="card helpcard"><b>Если тебе сейчас очень плохо или страшно</b><p>${nl(t)}</p></div>`;}
+function skeleton(n){return Array.from({length:n||3}).map(()=>'<div class="skel"></div>').join('');}
+function errBlock(msg,retryKey){return `<div class="err"><div style="font-size:36px">📡</div><b>Не получилось загрузить</b><p class="muted">${esc(msg||'Проверь интернет-соединение')}</p><button class="btn soft" data-act="retry" data-k="${esc(retryKey||'')}">Повторить</button></div>`;}
+function repCard(r,st){
+  const t=TM[r.type]||TM.other;
+  const un=st?!r.staffSeen:r.unseen;
+  const a=st&&r.assignee?((cache['staff']||[]).find(x=>x.id===r.assignee)||{}).name:null;
+  const src=st?(r.body||''):(r.preview||'');
+  const pv=src.length>90?esc(src.slice(0,90))+'…':esc(src);
+  return `<button class="card rc" style="--c:${t.c}" data-act="${st?'srep':'open'}" data-code="${esc(r.code)}"><span class="em">${t.emoji}</span><span class="rc-b"><span class="rc-t"><b>${esc(t.name)}</b>${r.urgent?'<span class="pill alert">Срочно</span>':''}</span><span class="rc-p">${pv}</span><span class="rc-m"><span class="pill ${r.status}">${STATUS[r.status]}</span><span>${esc(r.code)} · ${fmt(r.created)}${a?' · '+esc(a):''}</span></span></span>${un?'<i class="dot2" title="Новое"></i>':''}</button>`;
+}
+function filesHtml(files){
+  if(!files||!files.length)return '';
+  return `<div class="gallery">${files.map(f=>{
+    if(f.kind==='image')return f.url?`<img src="${f.url}" alt="Прикреплённое фото">`:`<div class="fi">🖼<br>недоступно</div>`;
+    if(f.kind==='video')return f.url?`<a class="fi" href="${f.url}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">🎞<br>${esc(f.name)}</a>`:`<div class="fi">🎞<br>${esc(f.name)}</div>`;
+    return `<div class="fi">📄<br>${esc(f.name)}</div>`;
+  }).join('')}</div>`;
+}
+function threadHtml(r,staffView){
+  const all=[{from:'student',text:r.body,ts:r.created}].concat(r.thread||[]);
+  return all.map(m=>{
+    const mine=staffView?m.from==='staff':m.from==='student';
+    const cls=m.from==='ai'?'ai':(mine?'me':'them');
+    const who=m.from==='ai'?'ИИ-помощник':m.from==='staff'?(m.by||'Школа'):(staffView?'Ученик':'Ты');
+    return `<div class="msg ${cls}">${nl(m.text)}<small>${esc(who)} · ${fmt(m.ts)}</small></div>`;
+  }).join('');
+}
+function notFound(){return `<div class="pad"><div class="empty"><div class="big">🔍</div><b>Обращение не найдено</b><p>Проверь код или вернись на главную.</p><button class="btn primary" data-act="home">На главную</button></div></div>`;}
+function pwScore(p){
+  p=p||'';let s=0;
+  if(p.length>=8)s++;if(p.length>=12)s++;
+  if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;
+  if(/[0-9]/.test(p))s++;
+  return Math.min(s,4);
+}
+
+/* ================= views ================= */
+const V={};
+
+V.home=function(){
+  const settings=ensure('settings',fetchPublicSettings);
+  const codes=myCodesLocal();
+  const my=codes.length?ensure('mine',fetchMyReports):[];
+  if(codes.length)ensure('events',fetchMyEvents);
+  const myList=Array.isArray(my)?my:[];
+  const un=unreadCount();
+  return `<section class="hero"><svg class="rings" viewBox="0 0 300 300" aria-hidden="true"><circle cx="150" cy="150" r="30"/><circle cx="150" cy="150" r="60"/><circle cx="150" cy="150" r="95"/><circle cx="150" cy="150" r="135"/></svg>
+  <div class="hero-in"><h1>Здесь тебя слышат</h1>
+  <p>Расскажи о травле анонимно. Мы не спрашиваем имя. Психолог и учителя получат сообщение и помогут.</p>
+  <div class="stack"><button class="btn primary big" data-act="start">Рассказать о проблеме</button>
+  <button class="btn ghost big" data-act="go" data-v="chat">${ic('chat',20)} Чат с ИИ-помощником</button></div></div></section>
+  <div class="pad">
+  ${codes.length?`<button class="card link" data-act="go" data-v="mine" style="margin-top:14px"><div><b>Твои обращения: ${myList.length||codes.length}</b><span class="muted">${un?'Есть новые ответы: '+un:'Ответов пока нет'}</span></div>${un?'<i class="dot2"></i>':''}</button>`:''}
+  <h2>Как это работает</h2>
+  <ol class="steps">
+   <li><span class="n">1</span><div><b>Выбираешь, что случилось</b><span>Список тем помогает назвать проблему.</span></div></li>
+   <li><span class="n">2</span><div><b>Пишешь и прикладываешь файлы</b><span>Фото, видео, скриншоты. Имя не нужно.</span></div></li>
+   <li><span class="n">3</span><div><b>Получаешь ответ в уведомлениях</b><span>Код обращения сохраняется на твоём телефоне сам.</span></div></li>
+  </ol>
+  <h2>Что мы гарантируем</h2>
+  <div class="assure">
+   <div>${ic('lock',22)}<span>Форма не просит имя, класс и контакты</span></div>
+   <div>${ic('shield',22)}<span>Обращения видят только психолог и назначенные учителя</span></div>
+   <div>${ic('bell',22)}<span>Ответ школы приходит колокольчиком 🔔</span></div>
+  </div>
+  </div>`;
+};
+
+V.types=function(){
+  return `<div class="pad"><p class="lead">Выбери ближайший вариант. Точно называть проблему не нужно.</p>
+  <div class="tgrid">${TYPES.map(t=>`<button class="tcard${t.id==='other'?' wide':''}" style="--c:${t.c}" data-act="pick" data-id="${t.id}"><span class="em">${t.emoji}</span><span class="tx"><b>${esc(t.name)}</b><small>${esc(t.desc)}</small></span></button>`).join('')}</div></div>`;
+};
+
+V.form=function(){
+  const t=TM[draft.type]||TM.other;
+  return `<div class="pad">
+  <div class="typebar" style="--c:${t.c}"><span style="font-size:22px">${t.emoji}</span><b>${esc(t.name)}</b><button class="link-btn" data-act="back">Изменить</button></div>
+  <label class="lbl" for="f-text">Что произошло?</label>
+  <textarea id="f-text" class="field" data-bind="text" placeholder="Кто и что сделал, как часто. Имя обидчика можно написать, своё писать не нужно."></textarea>
+  <div class="lbl">Где это происходит?</div><div class="chips">${PLACES.map(p=>chip(p,draft.place===p,'place')).join('')}</div>
+  <div class="lbl">Как давно?</div><div class="chips">${WHENS.map(p=>chip(p,draft.when===p,'when')).join('')}</div>
+  <div class="lbl">Фото, видео или файлы</div>
+  <button class="btn soft" data-act="attach">${ic('clip',20)} Прикрепить</button>
+  <div class="files">${draft.files.map((f,i)=>`<div class="file">${f.previewUrl?`<img src="${f.previewUrl}" alt="">`:`<span class="fi">${f.kind==='video'?'🎞':'📄'}</span>`}<span>${esc(f.name)}</span><button data-act="rmfile" data-i="${i}" aria-label="Убрать файл">${ic('close',18)}</button></div>`).join('')}</div>
+  <label class="check"><input type="checkbox" data-act="urgent"${draft.urgent?' checked':''}> Мне страшно или нужна помощь сегодня</label>
+  <button class="btn primary big full" data-act="submit"${draft.busy?' disabled':''}>${draft.busy?'Отправляем…':'Отправить анонимно'}</button>
+  <p class="fine">${ic('lock',14)}<span>Форма не спрашивает имя, класс и контакты. Файлы видят только психолог и назначенные учителя.</span></p>
+  </div>`;
+};
+
+V.done=function(p){
+  const r=ensure('report:'+p.code,()=>fetchReportFull(p.code));
+  if(r===undefined)return `<div class="pad center">${skeleton(2)}</div>`;
+  if(!r||r.__error)return notFound();
+  return `<div class="pad center"><div class="okmark">${ic('check',36)}</div><h2 style="margin-top:0">Обращение отправлено</h2>
+  <p class="muted">Мы не знаем, кто ты. Ответ школы придёт в уведомления 🔔 на этом устройстве.</p>
+  <div class="codebox"><span class="muted">Код обращения</span><b class="code">${esc(r.code)}</b><button class="btn soft" data-act="copy" data-code="${esc(r.code)}">${ic('copy',18)} Скопировать</button></div>
+  <p class="fine" style="justify-content:center">Код уже сохранён на этом устройстве. Копировать нужно только чтобы открыть обращение с другого телефона.</p>
+  ${r.urgent?helpCard():''}
+  <div class="stack" style="margin-top:16px"><button class="btn primary big" data-act="open" data-code="${esc(r.code)}">Открыть обращение</button><button class="btn soft big" data-act="home">На главную</button></div></div>`;
+};
+
+V.mine=function(){
+  const my=ensure('mine',fetchMyReports);
+  const codes=myCodesLocal();
+  let body;
+  if(my===undefined)body=skeleton(3);
+  else if(my&&my.__error)body=errBlock(my.__error,'mine');
+  else if(my.length)body=my.map(r=>repCard(r,false)).join('');
+  else body=`<div class="empty"><div class="big">📭</div><b>Обращений пока нет</b><p>Когда отправишь обращение, оно появится здесь.</p><button class="btn primary" data-act="start">Рассказать о проблеме</button></div>`;
+  return `<div class="pad">${body}
+  <div class="card"><label class="lbl" style="margin-top:0" for="f-code">У меня есть код с другого устройства</label>
+  <div class="row"><input id="f-code" class="field" data-bind="code" placeholder="ABCD-2345" autocapitalize="characters" autocomplete="off"><button class="btn soft" data-act="addcode">Добавить</button></div></div>
+  ${codes.length?`<button class="btn danger-soft full" data-act="forget">Забыть обращения на этом устройстве</button><p class="fine">Обращения останутся у школы, но с этого телефона их больше не будет видно.</p>`:''}</div>`;
+};
+
+V.rep=function(p){
+  const r=ensure('report:'+p.code,()=>fetchReportFull(p.code));
+  if(r===undefined)return `<div class="pad">${skeleton(4)}</div>`;
+  if(!r||r.__error)return r&&r.__error?errBlock(r.__error,'report:'+p.code):notFound();
+  const t=TM[r.type]||TM.other;
+  const idx={new:0,work:1,done:2}[r.status];
+  return `<div class="pad">
+  <div class="rephead" style="--c:${t.c}"><span class="em">${t.emoji}</span><div><b>${esc(t.name)}</b><span class="muted">${esc(r.code)} · ${fmt(r.created)}</span></div><button class="ib" data-act="copy" data-code="${esc(r.code)}" aria-label="Скопировать код">${ic('copy',20)}</button></div>
+  <div class="stepper">${['new','work','done'].map((s,i)=>`<div class="st${i<=idx?' on':''}"><i></i>${STATUS[s]}</div>`).join('')}</div>
+  ${filesHtml(r.files)}
+  <div>${threadHtml(r,false)}</div>
+  ${!(r.thread||[]).some(m=>m.from==='staff')?`<p class="fine" style="justify-content:center">Школа ответит здесь. Уведомление придёт в 🔔.</p>`:''}
+  ${r.urgent?helpCard():''}
+  <label class="lbl" for="f-msg">Дополнить обращение</label>
+  <textarea id="f-msg" class="field" style="min-height:90px" data-bind="msg" placeholder="Что-то изменилось или ты вспомнил(а) детали"></textarea>
+  <button class="btn primary full" style="margin-top:10px" data-act="addmsg" data-code="${esc(r.code)}">Отправить</button></div>`;
+};
+
+V.notifs=function(){
+  const ev=ensure('events',fetchMyEvents);
+  let body;
+  if(ev===undefined)body=skeleton(3);
+  else if(ev.__error)body=errBlock(ev.__error,'events');
+  else if(ev.length)body=`<button class="link-btn" data-act="markall">Отметить всё прочитанным</button>${ev.slice().sort((a,b)=>b.ts-a.ts).map(e=>`<button class="card nt${e.seen?'':' new'}" data-act="open" data-code="${esc(e.code)}"><b>${esc(e.text)}</b><span class="muted">${fmt(e.ts)}</span></button>`).join('')}`;
+  else body=`<div class="empty"><div class="big">🔔</div><b>Пока тихо</b><p>Когда школа ответит или изменит статус обращения, ты увидишь это здесь.</p><button class="btn primary" data-act="start">Рассказать о проблеме</button></div>`;
+  return `<div class="pad">${body}</div>`;
+};
+
+/* info pages (static) */
+V.how=function(){return `<div class="pad"><ol class="steps" style="margin-top:8px">
+ <li><span class="n">1</span><div><b>Выбираешь тему</b><span>Физическое насилие, оскорбления, кибербуллинг, бойкот, угрозы, порча вещей или другое.</span></div></li>
+ <li><span class="n">2</span><div><b>Рассказываешь, что случилось</b><span>Можно приложить фото, видео, скриншоты. Имя писать не нужно.</span></div></li>
+ <li><span class="n">3</span><div><b>Получаешь код обращения</b><span>Он сохраняется на этом телефоне сам.</span></div></li>
+ <li><span class="n">4</span><div><b>Школа отвечает</b><span>Психолог и назначенные учителя пишут ответ. Ты увидишь его в 🔔 и в разделе «Мои обращения».</span></div></li></ol>
+ <button class="btn primary big full" style="margin-top:22px" data-act="start">Рассказать о проблеме</button></div>`;};
+V.what=function(){return `<div class="pad">
+ <p class="lead">Буллинг — это когда человека обижают снова и снова, а защититься трудно: обидчик сильнее, их много или травля идёт через интернет.</p>
+ <div class="card"><b>✊ Физический</b><p class="muted" style="margin:4px 0 0">Бьют, толкают, отбирают и портят вещи.</p></div>
+ <div class="card"><b>💬 Словесный</b><p class="muted" style="margin:4px 0 0">Обзывают, унижают, распускают слухи.</p></div>
+ <div class="card"><b>🚪 Бойкот</b><p class="muted" style="margin:4px 0 0">Игнорируют, не принимают в компанию, настраивают других.</p></div>
+ <div class="card"><b>📱 Кибербуллинг</b><p class="muted" style="margin:4px 0 0">Травля в чатах и соцсетях, унизительные фото и видео.</p></div>
+ <div class="card"><b>⚠️ Угрозы и шантаж</b><p class="muted" style="margin:4px 0 0">Запугивают, требуют что-то под угрозой.</p></div>
+ <h2>Важно помнить</h2>
+ <p>Это не твоя вина. Попросить о помощи — не ябедничество, а способ остановить травлю.</p>
+ <p>Одна ссора не всегда буллинг. Но если тебе плохо, сообщи в любом случае.</p>
+ <p>Если ты видишь травлю со стороны, тоже можно рассказать.</p></div>`;};
+V.help=function(){ensure('settings',fetchPublicSettings);return `<div class="pad">
+ ${helpCard()}
+ <h2>Если опасность прямо сейчас</h2><p>Позвони по номеру экстренной помощи или подойди к взрослому, которому доверяешь: учителю, охраннику, родителю.</p>
+ <h2>Что можно сделать самому</h2>
+ <p>Сохрани доказательства: скриншоты переписки, фото, записи. Не отвечай обидчикам в интернете. Расскажи кому-то из близких.</p>
+ <button class="btn primary big full" data-act="go" data-v="chat">Поговорить с ИИ-помощником</button></div>`;};
+V.privacy=function(){return `<div class="pad">
+ <div class="card"><b>Форма не просит имя, класс и контакты</b></div>
+ <div class="card"><b>Видят только психолог и назначенные учителя</b><p class="muted" style="margin:4px 0 0">Остальные ученики обращения не видят, на сайте они нигде не показываются.</p></div>
+ <div class="card"><b>Срочные обращения выделяются</b><p class="muted" style="margin:4px 0 0">Если в сообщении есть опасность для жизни, психолог увидит его первым.</p></div>
+ <h2>Честно о границах</h2>
+ <p>Школа может догадаться, кто ты, по деталям рассказа. Если хочешь остаться неузнанным, не пиши то, что известно только тебе.</p>
+ <p>Код обращения — это единственный способ открыть переписку. Если его узнает кто-то ещё, он тоже сможет её прочитать, поэтому не показывай код посторонним.</p>
+ <p>Сообщения из чата с ИИ тоже видит психолог школы.</p></div>`;};
+
+/* ================= AI chat (scripted demo; replace with a real model later) ================= */
+const AI={
+  hit:['То, что тебя бьют или толкают, не шутка и не твоя вина. Ты имеешь право быть в безопасности. Если угроза сейчас, сразу подойди ко взрослому в школе. Расскажи подробнее: кто, где и как часто? Психолог увидит эти детали и сможет помочь.'],
+  cyber:['Травля в интернете тоже серьёзна, даже если всё «только в чате». Не отвечай обидчикам и сохрани скриншоты. Их можно приложить к обращению: нажми «Оформить обращение» ниже.'],
+  ignore:['Когда тебя игнорируют, это очень больно, и это тоже считается буллингом. Ты не «странный» и не виноват. Есть ли рядом кто-то, с кем спокойно: друг, учитель, кто-то из семьи?'],
+  fear:['Бояться идти туда, где тебя обижают, — нормальная реакция, а не слабость. Можно подумать, что сделает утро легче: прийти с другом или попросить учителя присмотреть за ситуацией. Что пугает больше всего?'],
+  sad:['Слышу, что тебе тяжело. Спасибо, что написал(а) об этом. Тебе не нужно справляться в одиночку. Расскажи, что случилось? А если хочешь, нажми «Успокоиться», и мы вместе сделаем несколько медленных вдохов.'],
+  anger:['Злиться в такой ситуации нормально: с тобой поступили несправедливо. Важно не отвечать тем же и не оставаться с этим одному. Расскажи, что произошло?'],
+  thanks:['Пожалуйста. Я рядом, когда нужно поговорить. Психолог школы тоже ответит, ты получишь уведомление 🔔.'],
+  def:['Я слушаю. Расскажи чуть подробнее: что произошло и как давно?','Спасибо, что доверил(а) мне это. Что было самым тяжёлым в этой ситуации?','Понимаю. Это не твоя вина. Кто и как часто это делает? Такие детали помогут школе действовать.']
+};
+function aiReply(text,help){
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  if(CRISIS.test(text))return{urgent:true,t:'Мне очень жаль, что тебе сейчас так тяжело. Ты важен(на), и твоя жизнь важна. Пожалуйста, прямо сейчас поговори с живым человеком: позвони по номеру ниже или подойди ко взрослому, которому доверяешь. Психолог школы получил твоё сообщение как срочное.\n\n'+help};
+  if(DANGER.test(text))return{urgent:true,t:'Слышу, как много злости и боли. Хорошо, что ты написал(а) об этом. Пожалуйста, поговори со взрослым, которому доверяешь, или позвони по номеру ниже. Психолог получил твоё сообщение как срочное.\n\n'+help};
+  const rules=[[/(бьют|бил|ударил|толкну|толкают|избил|избив)/i,'hit'],[/(чат|соцсет|интернет|инст|телеграм|тикток|скриншот)/i,'cyber'],[/(игнор|бойкот|не дружат|никто не (говорит|общается)|одинок)/i,'ignore'],[/(боюсь|страшно|не хочу в школу|не хочу идти)/i,'fear'],[/(грустно|плохо|плачу|тяжело|устал|обидно)/i,'sad'],[/(злюсь|ненавижу|бесит)/i,'anger'],[/(спасибо)/i,'thanks']];
+  for(const [re,k] of rules)if(re.test(text))return{urgent:false,t:pick(AI[k])};
+  return{urgent:false,t:pick(AI.def)};
+}
+function chatHtml(){
+  return chat.msgs.map(m=>m.k==='sys'?`<div class="msg sys">${esc(m.t)}</div>`:`<div class="msg ${m.k==='me'?'me':'ai'}">${nl(m.t)}</div>`).join('')+(chat.busy?'<div class="msg ai typing">Печатает…</div>':'');
+}
+V.chat=function(){
+  const s=ensure('settings',fetchPublicSettings);
+  if(s===undefined)return `<div class="pad">${skeleton(2)}</div>`;
+  if(!s.__error&&s.ai_enabled===false)return `<div class="pad"><div class="empty"><div class="big">🤖</div><b>ИИ-помощник сейчас отключён</b><p>Ты можешь оформить обращение, психолог его прочитает.</p><button class="btn primary" data-act="start">Рассказать о проблеме</button></div></div>`;
+  if(!chat.msgs.length)chat.msgs.push({k:'ai',t:'Привет. Я ИИ-помощник, я не человек. Можешь написать всё, что тревожит, я выслушаю и подскажу, что делать дальше.'});
+  return `<div class="pad" style="padding-bottom:10px"><div class="banner">${ic('lock',16)}<span>Психолог школы видит сообщения из этого чата, но не знает, кто ты. ИИ не заменяет живого человека.</span></div>
+  <div id="msgs">${chatHtml()}</div>
+  <div class="chips qk">${['Меня обижают','Мне грустно','Боюсь идти в школу'].map(q=>`<button class="chip" data-act="quick" data-t="${esc(q)}">${esc(q)}</button>`).join('')}<button class="chip" data-act="breath">Успокоиться</button><button class="chip" data-act="start">Оформить обращение</button></div>
+  <div class="composer"><textarea id="ci" class="field" rows="1" data-bind="chat" placeholder="Напиши, что на душе"></textarea><button class="ib send" data-act="csend" aria-label="Отправить">${ic('send',22)}</button></div></div>`;
+};
+function renderChat(){
+  const m=$('#msgs');if(!m)return;m.innerHTML=chatHtml();
+  const ci=$('#ci');if(ci)ci.value=B.chat||'';
+  window.scrollTo(0,document.body.scrollHeight);
+}
+async function chatPersist(text,urgent){
+  if(!chat.code){
+    const {data:code,error}=await sb.rpc('submit_report',{p_type:'chat',p_place:null,p_when:null,p_body:text,p_urgent:!!urgent});
+    if(!error&&code){chat.code=code;addCodeLocal(code);invalidate('mine');invalidate('events');chat.msgs.push({k:'sys',t:'Сообщение передано психологу школы. Код обращения: '+code+'. Ответ придёт в 🔔.'});}
+    return;
+  }
+  try{await sb.rpc('student_add_message',{p_code:chat.code,p_body:text});invalidate('events');}catch(e){}
+}
+async function sendChat(text){
+  text=(text||'').trim();if(!text||chat.busy)return;
+  chat.msgs.push({k:'me',t:text});B.chat='';
+  await chatPersist(text,CRISIS.test(text)||DANGER.test(text));
+  chat.busy=true;renderChat();
+  const s=cache['settings']&&!cache['settings'].__error?cache['settings'].help_text:DEFAULT_HELP;
+  setTimeout(async()=>{
+    const a=aiReply(text,s);
+    chat.busy=false;chat.msgs.push({k:'ai',t:a.t});
+    await chatPersist(a.t,a.urgent);
+    if(cur().v==='chat'){renderChat();render(true);}
+  },800);
+}
+
+/* ================= staff views ================= */
+V['s-login']=function(){
+  return `<div class="pad"><p class="muted" style="margin-top:8px">Учителя и психолог видят обращения. Администратор управляет всей системой.</p>
+  <label class="lbl" for="f-login">Почта</label><input id="f-login" class="field" type="email" data-bind="login" autocapitalize="none" autocomplete="username">
+  <label class="lbl" for="f-pass">Пароль</label><input id="f-pass" class="field" type="password" data-bind="pass" autocomplete="current-password">
+  <button class="btn primary big full" style="margin-top:20px" data-act="login"${draft.busy?' disabled':''}>${draft.busy?'Входим…':'Войти'}</button></div>`;
+};
+V['s-setpw']=function(){
+  const p=B.newpw||'';const sc=pwScore(p);
+  return `<div class="pad"><div class="card helpcard" style="background:var(--soft);color:var(--ink);border-color:var(--line)"><b>Придумай новый пароль</b><p class="muted" style="margin:6px 0 0">Это твой первый вход. Временный пароль администратора больше работать не будет.</p></div>
+  <label class="lbl" for="f-np">Новый пароль (минимум 8 символов)</label>
+  <input id="f-np" class="field" type="password" data-bind="newpw" autocomplete="new-password">
+  <div class="pwmeter${sc>=4?' ok':sc>=2?' mid':''}"><i style="width:${sc*25}%"></i></div>
+  <label class="lbl" for="f-np2">Повтори пароль</label>
+  <input id="f-np2" class="field" type="password" data-bind="newpw2" autocomplete="new-password">
+  <button class="btn primary big full" style="margin-top:20px" data-act="setpw"${draft.busy?' disabled':''}>${draft.busy?'Сохраняем…':'Сохранить пароль'}</button></div>`;
+};
+const visible=all=>all.filter(r=>profile.role==='teacher'?r.assignee===session.user.id:true).sort((a,b)=>(b.urgent&&b.status!=='done')-(a.urgent&&a.status!=='done')||b.created-a.created);
+function complaints(){
+  const all=ensure('reports',fetchStaffReports);
+  if(all===undefined)return skeleton(4);
+  if(all.__error)return errBlock(all.__error,'reports');
+  const list0=visible(all);
+  const F=[['all','Все',list0.length],['new','Новые',list0.filter(r=>r.status==='new').length],['work','В работе',list0.filter(r=>r.status==='work').length],['done','Решено',list0.filter(r=>r.status==='done').length],['urgent','Срочные',list0.filter(r=>r.urgent&&r.status!=='done').length]];
+  const list=list0.filter(r=>sFilter==='all'||(sFilter==='urgent'?(r.urgent&&r.status!=='done'):r.status===sFilter));
+  ensure('staff',fetchStaffList);
+  return `<div class="tabs">${F.map(f=>`<button class="chip${sFilter===f[0]?' on':''}" data-act="sfilter" data-f="${f[0]}">${f[1]} ${f[2]}</button>`).join('')}</div>
+  ${list.length?list.map(r=>repCard(r,true)).join(''):`<div class="empty"><div class="big">✅</div><b>Здесь пусто</b><p>${profile.role==='teacher'?'Вам пока не назначили обращений.':'Обращений в этой категории нет.'}</p></div>`}`;
+}
+function adminOverview(){
+  const all=ensure('reports',fetchStaffReports);
+  if(all===undefined)return skeleton(4);
+  if(all.__error)return errBlock(all.__error,'reports');
+  const c=s=>all.filter(r=>r.status===s).length;
+  const urgent=all.filter(r=>r.urgent&&r.status!=='done').length;
+  const types=Object.keys(TM).map(id=>({id,n:all.filter(r=>r.type===id).length})).filter(x=>x.n>0);
+  const max=Math.max.apply(null,types.map(x=>x.n).concat([1]));
+  return `<div class="stats"><div class="stat"><b>${all.length}</b><span class="muted">Всего обращений</span></div><div class="stat"><b>${c('new')}</b><span class="muted">Новые</span></div><div class="stat"><b>${c('work')}</b><span class="muted">В работе</span></div><div class="stat"><b>${c('done')}</b><span class="muted">Решено</span></div><div class="stat al" style="grid-column:1/-1"><b>${urgent}</b><span class="muted">Срочные, ещё не решены</span></div></div>
+  <h3>По темам</h3><div class="bars">${types.map(x=>`<div class="bar"><span>${TM[x.id].emoji} ${esc(TM[x.id].name.split(' ')[0])}</span><i style="width:${Math.round(x.n/max*100)}%;background:${TM[x.id].c}"></i><b>${x.n}</b></div>`).join('')||'<p class="muted">Данных пока нет</p>'}</div>`;
+}
+function adminStaff(){
+  const list=ensure('staff',fetchStaffList);
+  if(list===undefined)return skeleton(3);
+  if(list.__error)return errBlock(list.__error,'staff');
+  return `${list.map(s=>`<div class="card"><div class="row" style="justify-content:space-between"><div><b>${esc(s.name)}</b><br><span class="muted">${esc(s.email)} · ${ROLE[s.role]}${s.must_change_password?' · ждёт первого входа':''}</span></div>${s.id===session.user.id?'<span class="pill">Это вы</span>':''}</div>${(s.id!==session.user.id&&s.role!=='admin')?`<div class="row" style="margin-top:10px"><button class="btn soft" data-act="resetstaff" data-id="${s.id}" data-name="${esc(s.name)}">Новый пароль</button><button class="btn danger-soft" data-act="delstaff" data-id="${s.id}" data-name="${esc(s.name)}">Удалить</button></div>`:''}</div>`).join('')}
+  <h3>Добавить сотрудника</h3>
+  <input class="field" data-bind="nname" placeholder="Имя (например, Учитель 7Б)" style="margin-bottom:8px">
+  <input class="field" type="email" data-bind="nemail" placeholder="Почта для входа" autocapitalize="none" style="margin-bottom:8px">
+  <select class="field" data-bind="nrole" style="margin-bottom:10px"><option value="teacher">Учитель</option><option value="psy">Психолог</option></select>
+  <button class="btn primary full" data-act="addstaff"${draft.busy?' disabled':''}>${draft.busy?'Добавляем…':'Добавить'}</button>`;
+}
+function adminLog(){
+  const l=ensure('log',fetchLog);
+  if(l===undefined)return skeleton(4);
+  if(l.__error)return errBlock(l.__error,'log');
+  return l.length?l.map(x=>`<div class="logrow"><b>${esc(x.who)}</b>: ${esc(x.text)}<br><span class="muted">${fmt(x.ts)}</span></div>`).join(''):'<p class="muted">Журнал пока пуст.</p>';
+}
+function adminSettings(){
+  const s=ensure('settings',fetchPublicSettings);
+  if(s===undefined)return skeleton(2);
+  if(B.helptext==null&&!s.__error)B.helptext=s.help_text;
+  return `<div class="card switch"><div><b>ИИ-помощник</b><br><span class="muted">Чат поддержки для учеников</span></div><input type="checkbox" data-act="toggleai"${(!s.__error&&s.ai_enabled)?' checked':''} aria-label="Включить ИИ-помощника"></div>
+  <label class="lbl" for="f-help">Телефоны помощи (по одному в строке)</label>
+  <textarea id="f-help" class="field" data-bind="helptext" style="min-height:110px">${esc(B.helptext||'')}</textarea>
+  <button class="btn primary full" style="margin-top:10px" data-act="savehelp">Сохранить телефоны</button>`;
+}
+V['s-home']=function(){
+  if(!authReady)return `<div class="pad">${skeleton(2)}</div>`;
+  if(!session)return V['s-login']();
+  if(!profile){
+    const pe=cache['profileErr'];
+    return `<div class="pad">${skeleton(1)}</div>`;
+  }
+  if(profile.must_change_password)return V['s-setpw']();
+  const admin=profile.role==='admin';
+  const tabs=[['overview','Обзор'],['reports','Обращения'],['staff','Сотрудники'],['log','Журнал'],['settings','Настройки']];
+  let body;
+  if(!admin)body=complaints();
+  else body=aTab==='overview'?adminOverview():aTab==='reports'?complaints():aTab==='staff'?adminStaff():aTab==='log'?adminLog():adminSettings();
+  return `<div class="pad"><div class="who"><b>${esc(profile.name)}</b><span class="pill">${ROLE[profile.role]}</span><button class="link-btn" data-act="go" data-v="s-changepw" style="margin-left:auto">Сменить пароль</button></div>
+  ${admin?`<div class="tabs">${tabs.map(t=>`<button class="chip${aTab===t[0]?' on':''}" data-act="atab" data-t="${t[0]}">${t[1]}</button>`).join('')}</div>`:''}${body}</div>`;
+};
+V['s-changepw']=function(){
+  const p=B.cnewpw||'';const sc=pwScore(p);
+  return `<div class="pad">
+  <label class="lbl" for="f-cnp">Новый пароль</label><input id="f-cnp" class="field" type="password" data-bind="cnewpw" autocomplete="new-password">
+  <div class="pwmeter${sc>=4?' ok':sc>=2?' mid':''}"><i style="width:${sc*25}%"></i></div>
+  <label class="lbl" for="f-cnp2">Повтори пароль</label><input id="f-cnp2" class="field" type="password" data-bind="cnewpw2" autocomplete="new-password">
+  <button class="btn primary big full" style="margin-top:20px" data-act="changepw"${draft.busy?' disabled':''}>${draft.busy?'Сохраняем…':'Сохранить'}</button></div>`;
+};
+V['s-rep']=function(p){
+  const r=ensure('srep:'+p.code,()=>fetchStaffReportFull(p.code));
+  if(r===undefined)return `<div class="pad">${skeleton(4)}</div>`;
+  if(!r||r.__error)return r&&r.__error?errBlock(r.__error,'srep:'+p.code):notFound();
+  const t=TM[r.type]||TM.other;
+  const staffList=ensure('staff',fetchStaffList);
+  const canAssign=profile.role!=='teacher';
+  return `<div class="pad">
+  <div class="rephead" style="--c:${t.c}"><span class="em">${t.emoji}</span><div><b>${esc(t.name)}</b><span class="muted">${esc(r.code)} · ${fmt(r.created)}</span></div>${r.urgent?'<span class="pill alert">Срочно</span>':''}</div>
+  ${(r.place||r.when)?`<div class="meta">${r.place?`<span class="chip static">${esc(r.place)}</span>`:''}${r.when?`<span class="chip static">${esc(r.when)}</span>`:''}</div>`:''}
+  ${filesHtml(r.files)}
+  <div>${threadHtml(r,true)}</div>
+  <label class="lbl" for="f-sr">Ответ ученику</label>
+  <textarea id="f-sr" class="field" style="min-height:100px" data-bind="sreply" placeholder="Ученик получит уведомление"></textarea>
+  <button class="btn primary full" style="margin-top:10px" data-act="sreply" data-code="${esc(r.code)}">Отправить ответ</button>
+  <h3>Статус</h3><div class="seg">${['new','work','done'].map(s=>`<button class="segb${r.status===s?' on':''}" data-act="status" data-s="${s}" data-code="${esc(r.code)}">${STATUS[s]}</button>`).join('')}</div>
+  ${canAssign&&Array.isArray(staffList)?`<h3>Назначить сотрудника</h3><select class="field" data-act="assign" data-code="${esc(r.code)}" aria-label="Назначить сотрудника"><option value="">Не назначено</option>${staffList.filter(x=>x.role!=='admin').map(x=>`<option value="${x.id}"${r.assignee===x.id?' selected':''}>${esc(x.name)} (${ROLE[x.role]})</option>`).join('')}</select>`:''}
+  ${profile.role==='admin'?`<button class="btn danger-soft full" style="margin-top:20px" data-act="delrep" data-code="${esc(r.code)}">Удалить обращение</button>`:''}
+  </div>`;
+};
+
+/* ================= render ================= */
+function applyBinds(){document.querySelectorAll('[data-bind]').forEach(el=>{const v=B[el.dataset.bind];if(v!=null&&el.tagName!=='SELECT')el.value=v;});}
+function render(keep){
+  let t=cur();
+  if(t.v.indexOf('s-')===0&&t.v!=='s-login'&&authReady&&!session){stack[stack.length-1]={v:'s-login'};t=cur();}
+  const fn=V[t.v]||V.home;
+  const html=fn(t.p||{});
+  $('#hdr').innerHTML=header(t);
+  $('#app').innerHTML=html;
+  applyBinds();
+  if(!keep)window.scrollTo(0,0);
+  if(t.v==='chat')window.scrollTo(0,document.body.scrollHeight);
+}
+
+/* ================= overlays ================= */
+function closeOv(){$('#overlay').innerHTML='';clearInterval(breathT);breathT=null;pending=null;}
+const isDark=()=>{const d=document.documentElement.dataset.theme;return d?d==='dark':window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches;};
+function openMenu(){
+  const items=[['how','info','Как это работает'],['mine','list','Мои обращения'],['what','shield','Что такое буллинг'],['help','phone','Куда обратиться за помощью'],['privacy','lock','Гарантии анонимности']];
+  $('#overlay').innerHTML=`<div class="scrim" data-act="closeov"></div><aside class="drawer" role="dialog" aria-label="Меню"><div class="dh"><b class="brand">Рядом</b><button class="ib" data-act="closeov" aria-label="Закрыть меню">${ic('close')}</button></div>
+  ${items.map(x=>`<button class="mi" data-act="nav" data-v="${x[0]}">${ic(x[1],22)}<span>${x[2]}</span></button>`).join('')}
+  <div class="sep"></div>
+  <button class="mi" data-act="theme">${ic('moon',22)}<span>${isDark()?'Светлая тема':'Тёмная тема'}</span></button>
+  <button class="mi" data-act="nav" data-v="s-login">${ic('user',22)}<span>Вход для сотрудников</span></button></aside>`;
+  requestAnimationFrame(()=>{const d=document.querySelector('.drawer');if(d)d.classList.add('open');});
+}
+function ask(text,yes){pending=yes;$('#overlay').innerHTML=`<div class="scrim" data-act="no"></div><div class="modal" role="dialog"><p style="margin:0;font-weight:600">${esc(text)}</p><div class="stack"><button class="btn soft" data-act="no">Отмена</button><button class="btn primary" data-act="yes">Да</button></div></div>`;}
+function showPassword(pw,name){
+  $('#overlay').innerHTML=`<div class="scrim" data-act="closeov"></div><div class="modal" role="dialog"><b>Пароль для ${esc(name||'сотрудника')}</b><div class="gencard"><span class="muted">Покажи этот пароль один раз, дальше он не сохраняется</span><b>${esc(pw)}</b></div><button class="btn soft" data-act="copypw" data-pw="${esc(pw)}">${ic('copy',18)} Скопировать</button><button class="btn primary" data-act="closeov">Готово</button></div>`;
+}
+function openBreath(){
+  $('#overlay').innerHTML=`<div class="scrim" data-act="closeov"></div><div class="modal breath"><div class="orb"></div><p id="bt">Вдох</p><span class="muted">Дыши вместе с кругом. Вдох на 4 счёта, выдох на 4.</span><button class="btn soft" data-act="closeov">Мне легче</button></div>`;
+  let inh=true;clearInterval(breathT);
+  breathT=setInterval(()=>{inh=!inh;const b=$('#bt');if(b)b.textContent=inh?'Вдох':'Выдох';},4000);
+}
+function applyTheme(){const t=store.get('ab_theme',null);if(t)document.documentElement.dataset.theme=t;else delete document.documentElement.dataset.theme;}
+
+/* ================= files ================= */
+function prepFile(f){
+  return new Promise(res=>{
+    const kind=f.type.indexOf('image/')===0?'image':f.type.indexOf('video/')===0?'video':'file';
+    if(kind!=='image'){res({name:f.name,kind,blob:f,previewUrl:null});return;}
+    const url=URL.createObjectURL(f),img=new Image();
+    img.onload=()=>{
+      const k=Math.min(1,1280/Math.max(img.width,img.height));
+      const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      c.toBlob(b=>{URL.revokeObjectURL(url);const pu=b?URL.createObjectURL(b):null;res({name:'фото.jpg',kind,blob:b||f,previewUrl:pu});},'image/jpeg',0.75);
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);res({name:f.name,kind:'file',blob:f,previewUrl:null});};
+    img.src=url;
+  });
+}
+$('#fi').addEventListener('change',async e=>{
+  const list=Array.from(e.target.files);e.target.value='';
+  for(const f of list){
+    if(draft.files.length>=5){toast('Не больше 5 файлов');break;}
+    if(f.size>50*1024*1024){toast(f.name+' больше 50 МБ, пропущен');continue;}
+    draft.files.push(await prepFile(f));
+  }
+  if(cur().v==='form')render(true);
+});
+
+/* ================= actions ================= */
+const A={
+  menu:openMenu,
+  closeov:closeOv,
+  no:closeOv,
+  yes(){const f=pending;closeOv();if(f)f();},
+  nav(el){closeOv();let v=el.dataset.v;go(v);},
+  back,
+  home(){stack=[{v:'home'}];render();},
+  bell(){go('notifs');},
+  go(el){go(el.dataset.v);},
+  retry(el){const k=el.dataset.k;if(k){delete cache[k];delete loading[k];}render(true);},
+  start(){draft=freshDraft();B.text='';go('types');},
+  pick(el){draft.type=el.dataset.id;go('form');},
+  chip(el){const g=el.dataset.g,v=el.dataset.val;draft[g]=draft[g]===v?null:v;render(true);},
+  attach(){$('#fi').click();},
+  rmfile(el){const f=draft.files[el.dataset.i];if(f&&f.previewUrl)URL.revokeObjectURL(f.previewUrl);draft.files.splice(+el.dataset.i,1);render(true);},
+  async submit(){
+    const text=(B.text||'').trim();
+    if(text.length<3&&!draft.files.length){toast('Расскажи хотя бы пару слов');return;}
+    if(draft.busy)return;
+    draft.busy=true;render(true);
+    try{
+      const code=await apiSubmitReport();
+      addCodeLocal(code);invalidate('mine');invalidate('events');
+      B.text='';draft=freshDraft();
+      stack=[{v:'home'},{v:'done',p:{code}}];render();
+    }catch(e){draft.busy=false;toast('Не получилось отправить. Проверь интернет и попробуй ещё раз.');render(true);}
+  },
+  copy(el){const c=el.dataset.code;try{navigator.clipboard.writeText(c).then(()=>toast('Код скопирован'),()=>toast('Код: '+c));}catch(e){toast('Код: '+c);}},
+  copypw(el){const c=el.dataset.pw;try{navigator.clipboard.writeText(c).then(()=>toast('Пароль скопирован'),()=>{});}catch(e){}},
+  open(el){const c=el.dataset.code;apiMarkSeen(c).then(()=>invalidate('events'));go('rep',{code:c});},
+  async addcode(){
+    const c=(B.code||'').trim().toUpperCase();
+    if(!c){toast('Введи код');return;}
+    const r=await fetchReportFull(c);
+    if(!r){toast('Такого кода нет. Проверь и попробуй ещё раз.');return;}
+    addCodeLocal(c);B.code='';invalidate('mine');invalidate('events');toast('Обращение добавлено');render(true);
+  },
+  forget(){ask('Забыть все обращения на этом устройстве?',()=>{store.set('ab_mycodes',[]);invalidate('mine');invalidate('events');toast('Готово');render();});},
+  async addmsg(el){
+    const t=(B.msg||'').trim();if(!t){toast('Напиши сообщение');return;}
+    try{await apiAddStudentMessage(el.dataset.code,t);B.msg='';invalidate('report:'+el.dataset.code);invalidate('events');toast('Отправлено');render(true);}
+    catch(e){toast('Не получилось отправить, проверь интернет');}
+  },
+  async markall(){
+    const ev=cache['events'];
+    if(Array.isArray(ev))for(const e of ev)if(!e.seen)await apiMarkSeen(e.code);
+    invalidate('events');render(true);
+  },
+  csend(){sendChat(B.chat);},
+  quick(el){sendChat(el.dataset.t);},
+  breath:openBreath,
+  theme(){store.set('ab_theme',isDark()?'light':'dark');applyTheme();closeOv();},
+  /* staff */
+  async login(){
+    const email=(B.login||'').trim().toLowerCase(),pass=B.pass||'';
+    if(!email||!pass){toast('Заполни почту и пароль');return;}
+    if(draft.busy)return;draft.busy=true;render(true);
+    const {error}=await sb.auth.signInWithPassword({email,password:pass});
+    draft.busy=false;
+    if(error){toast('Неверная почта или пароль');render(true);return;}
+    B.pass='';
+    await refreshProfile();
+    stack=[{v:'home'},{v:'s-home'}];render();
+  },
+  async logout(){await sb.auth.signOut();Object.keys(cache).forEach(k=>{if(k.indexOf('report:')!==0&&k!=='settings')delete cache[k];});stack=[{v:'home'}];render();},
+  async setpw(){
+    const p=B.newpw||'',p2=B.newpw2||'';
+    if(p.length<8){toast('Пароль должен быть не короче 8 символов');return;}
+    if(p!==p2){toast('Пароли не совпадают');return;}
+    if(draft.busy)return;draft.busy=true;render(true);
+    const{error}=await sb.auth.updateUser({password:p});
+    draft.busy=false;
+    if(error){toast('Не получилось сохранить пароль');render(true);return;}
+    B.newpw='';B.newpw2='';
+    await refreshProfile();
+    toast('Пароль сохранён');
+    stack=[{v:'home'},{v:'s-home'}];render();
+  },
+  async changepw(){
+    const p=B.cnewpw||'',p2=B.cnewpw2||'';
+    if(p.length<8){toast('Пароль должен быть не короче 8 символов');return;}
+    if(p!==p2){toast('Пароли не совпадают');return;}
+    if(draft.busy)return;draft.busy=true;render(true);
+    const{error}=await sb.auth.updateUser({password:p});
+    draft.busy=false;
+    if(error){toast('Не получилось сохранить пароль');render(true);return;}
+    B.cnewpw='';B.cnewpw2='';toast('Пароль изменён');back();
+  },
+  srep(el){const c=el.dataset.code;sb.rpc('staff_mark_seen',{p_code:c}).then(()=>invalidate('reports'));go('s-rep',{code:c});},
+  sfilter(el){sFilter=el.dataset.f;render(true);},
+  atab(el){aTab=el.dataset.t;render(true);},
+  async status(el){
+    const c=el.dataset.code,s=el.dataset.s;
+    const{error}=await sb.rpc('staff_set_status',{p_code:c,p_status:s});
+    if(error){toast('Не получилось изменить статус');return;}
+    invalidate('reports');invalidate('srep:'+c);invalidate('log');render(true);
+  },
+  async sreply(el){
+    const t=(B.sreply||'').trim();if(!t){toast('Напиши ответ');return;}
+    const c=el.dataset.code;
+    const{error}=await sb.rpc('staff_reply',{p_code:c,p_body:t});
+    if(error){toast('Не получилось отправить ответ');return;}
+    B.sreply='';invalidate('reports');invalidate('srep:'+c);invalidate('log');toast('Ответ отправлен');render(true);
+  },
+  delrep(el){const c=el.dataset.code;ask('Удалить обращение '+c+'? Это нельзя отменить.',async()=>{
+    const{error}=await sb.rpc('admin_delete_report',{p_code:c});
+    if(error){toast('Не получилось удалить');return;}
+    invalidate('reports');invalidate('log');back();
+  });},
+  async addstaff(){
+    const n=(B.nname||'').trim(),email=(B.nemail||'').trim().toLowerCase(),role=B.nrole||'teacher';
+    if(!n||!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('Заполни имя и корректную почту');return;}
+    if(draft.busy)return;draft.busy=true;render(true);
+    try{
+      const{data:{session:s}}=await sb.auth.getSession();
+      const res=await fetch('/api/staff',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+(s&&s.access_token)},body:JSON.stringify({action:'create',name:n,email,role})});
+      const out=await res.json();
+      draft.busy=false;
+      if(!res.ok){toast(out.error==='forbidden'?'Недостаточно прав':'Не получилось добавить сотрудника');render(true);return;}
+      B.nname='';B.nemail='';invalidate('staff');invalidate('log');render(true);
+      showPassword(out.password,n);
+    }catch(e){draft.busy=false;toast('Ошибка сети');render(true);}
+  },
+  resetstaff(el){const id=el.dataset.id,name=el.dataset.name;ask('Сгенерировать новый пароль для '+name+'? Старый перестанет работать.',async()=>{
+    const{data:{session:s}}=await sb.auth.getSession();
+    const res=await fetch('/api/staff',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+(s&&s.access_token)},body:JSON.stringify({action:'reset',id})});
+    const out=await res.json();
+    if(!res.ok){toast('Не получилось сбросить пароль');return;}
+    invalidate('staff');showPassword(out.password,name);
+  });},
+  delstaff(el){const id=el.dataset.id,name=el.dataset.name;ask('Удалить сотрудника '+name+'?',async()=>{
+    const{data:{session:s}}=await sb.auth.getSession();
+    const res=await fetch('/api/staff',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+(s&&s.access_token)},body:JSON.stringify({action:'delete',id})});
+    if(!res.ok){toast('Не получилось удалить');return;}
+    invalidate('staff');invalidate('reports');invalidate('log');render(true);
+  });},
+  async savehelp(){
+    const t=(B.helptext||'').trim();if(!t){toast('Список не должен быть пустым');return;}
+    const{error}=await sb.rpc('admin_set_setting',{p_key:'help_text',p_value:JSON.stringify(t)});
+    if(error){toast('Не получилось сохранить');return;}
+    invalidate('settings');toast('Сохранено');
+  },
+  resetdemo(){}
+};
+const C={
+  urgent(t){draft.urgent=t.checked;},
+  async toggleai(t){
+    const{error}=await sb.rpc('admin_set_setting',{p_key:'ai_enabled',p_value:JSON.stringify(!!t.checked)});
+    if(error){toast('Не получилось сохранить');t.checked=!t.checked;return;}
+    invalidate('settings');invalidate('log');
+  },
+  async assign(t){
+    const c=t.dataset.code,v=t.value||null;
+    const{error}=await sb.rpc('staff_assign',{p_code:c,p_user:v});
+    if(error){toast('Не получилось назначить');return;}
+    invalidate('reports');invalidate('srep:'+c);invalidate('log');toast('Назначено');
+  }
+};
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;const f=A[el.dataset.act];if(f)f(el,e);});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&C[t.dataset.act])C[t.dataset.act](t);});
+document.addEventListener('input',e=>{const b=e.target.dataset&&e.target.dataset.bind;if(b){B[b]=e.target.value;if(b==='newpw'||b==='newpw2'||b==='cnewpw'||b==='cnewpw2')render(true);}});
+document.addEventListener('keydown',e=>{if(e.target.id==='ci'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat(B.chat);}});
+
+/* ================= start ================= */
+applyTheme();
+render();
+sb.auth.getSession().then(({data:{session:s}})=>{session=s;authReady=true;refreshProfile().then(()=>render());});
+})();
+
+</script>
+</body>
+</html>
